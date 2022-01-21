@@ -1,5 +1,11 @@
+# Github Username
+jrydecki
+
 # Programs
 Base code for program assignments in Software Development (C S 371). 
+
+## Program 0
+This assingment relies on the HelloWorld program.
 
 ## Program 1 and Program 2
 These assignments rely on the SimpleWebServer program. Each gets graded using tags in a cloned repository. 
