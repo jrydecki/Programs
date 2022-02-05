@@ -48,16 +48,16 @@ public class WebWorker implements Runnable
 	 * destroys the thread. This method assumes that whoever created the worker created it with a
 	 * valid open socket object.
 	 **/
-	public void run()
+	public void run() // This is what we need to edit
 	{
 		System.err.println("Handling connection...");
 		try
 		{
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
-			readHTTPRequest(is);
-			writeHTTPHeader(os, "text/html");
-			writeContent(os);
+			readHTTPRequest(is);                 // These 3 lines!
+			writeHTTPHeader(os, "text/html");    //   **
+			writeContent(os);  					 //   *
 			os.flush();
 			socket.close();
 		}
@@ -109,7 +109,7 @@ public class WebWorker implements Runnable
 		Date d = new Date();
 		DateFormat df = DateFormat.getDateTimeInstance();
 		df.setTimeZone(TimeZone.getTimeZone("GMT"));
-		os.write("HTTP/1.1 200 OK\n".getBytes());
+		os.write("HTTP/1.1 200 OK\n".getBytes());  //needs to return 404 if file doesn't exist -- this line
 		os.write("Date: ".getBytes());
 		os.write((df.format(d)).getBytes());
 		os.write("\n".getBytes());
