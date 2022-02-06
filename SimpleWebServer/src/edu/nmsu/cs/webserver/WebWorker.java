@@ -22,6 +22,10 @@ package edu.nmsu.cs.webserver;
  **/
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -55,9 +59,9 @@ public class WebWorker implements Runnable
 		{
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
-			readHTTPRequest(is);                 // These 3 lines!
-			writeHTTPHeader(os, "text/html");    //   **
-			writeContent(os);  					 //   *
+			readHTTPRequest(is);     
+		    String file = writeHTTPHeader(os, "text/html"); 
+			writeContent(os, file);  					 
 			os.flush();
 			socket.close();
 		}
@@ -72,8 +76,15 @@ public class WebWorker implements Runnable
 	/**
 	 * Read the HTTP request header.
 	 **/
-	private void readHTTPRequest(InputStream is)
+	private void readHTTPRequest(InputStream is) throws Exception
 	{
+		
+		File requestFile = new File("request.txt");
+		requestFile.delete();
+		
+		FileWriter writer = new FileWriter("request.txt");  
+	    BufferedWriter buffer = new BufferedWriter(writer);	
+		
 		String line;
 		BufferedReader r = new BufferedReader(new InputStreamReader(is));
 		while (true)
@@ -84,6 +95,9 @@ public class WebWorker implements Runnable
 					Thread.sleep(1);
 				line = r.readLine();
 				System.err.println("Request line: (" + line + ")");
+				
+				buffer.write(line + "\n");
+				
 				if (line.length() == 0)
 					break;
 			}
@@ -93,6 +107,7 @@ public class WebWorker implements Runnable
 				break;
 			}
 		}
+		buffer.close();
 		return;
 	}
 
@@ -104,23 +119,55 @@ public class WebWorker implements Runnable
 	 * @param contentType
 	 *          is the string MIME content type (e.g. "text/html")
 	 **/
-	private void writeHTTPHeader(OutputStream os, String contentType) throws Exception
+	private String writeHTTPHeader(OutputStream os, String contentType) throws Exception
 	{
+		
+		boolean isProblem = false;
+		
+		BufferedReader reader = new BufferedReader(new FileReader("request.txt"));
+		
+		String GETline  = reader.readLine();
+		
+		int indexOfSlash = GETline.indexOf("/");
+		GETline = GETline.substring(indexOfSlash);
+		
+		int indexOfNextSpace = GETline.indexOf(" ");
+		GETline = GETline.substring(1, indexOfNextSpace);
+		
+		File requestedFile = new File(GETline);
+		
+		
 		Date d = new Date();
 		DateFormat df = DateFormat.getDateTimeInstance();
 		df.setTimeZone(TimeZone.getTimeZone("GMT"));
-		os.write("HTTP/1.1 200 OK\n".getBytes());  //needs to return 404 if file doesn't exist -- this line
+		
+		if (GETline.equals("") || requestedFile.exists()) {
+			os.write("HTTP/1.1 200 OK\n".getBytes());
+			isProblem = false;
+		}
+		else {
+			os.write("HTTP/1.1 404 NOT FOUND\n".getBytes());
+			isProblem = true;
+		}
+		
+		
 		os.write("Date: ".getBytes());
 		os.write((df.format(d)).getBytes());
 		os.write("\n".getBytes());
 		os.write("Server: Jon's very own server\n".getBytes());
-		// os.write("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT\n".getBytes());
-		// os.write("Content-Length: 438\n".getBytes());
+		
 		os.write("Connection: close\n".getBytes());
 		os.write("Content-Type: ".getBytes());
 		os.write(contentType.getBytes());
 		os.write("\n\n".getBytes()); // HTTP header ends with 2 newlines
-		return;
+		
+		
+		if (isProblem) {
+			return "ERROR";
+		}
+		else {
+			return GETline;
+		}
 	}
 
 	/**
@@ -130,11 +177,29 @@ public class WebWorker implements Runnable
 	 * @param os
 	 *          is the OutputStream object to write to
 	 **/
-	private void writeContent(OutputStream os) throws Exception
+	private void writeContent(OutputStream os, String file) throws Exception
 	{
-		os.write("<html><head></head><body>\n".getBytes());
-		os.write("<h3>My web server works!</h3>\n".getBytes());
-		os.write("</body></html>\n".getBytes());
+		
+		if (file.equals("ERROR")) {
+			os.write("<html><head></head><body>\n".getBytes());
+			os.write("<center><h1>404 Not Found</h1></center>\n".getBytes());
+			os.write("</body></html>\n".getBytes());
+		}
+		else if (file.equals("")) {
+			os.write("<html><head></head><body>\n".getBytes());
+			os.write("<h3>My web server works!</h3>\n".getBytes());
+			os.write("</body></html>\n".getBytes());
+		}
+		else {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			String line;
+		
+			while ((line = reader.readLine()) != null) {
+				os.write(line.getBytes());
+			}
+		
+		}
+		
 	}
 
 } // end class
