@@ -125,10 +125,12 @@ public class WebWorker implements Runnable
 		
 		boolean isProblem = false;
 		
+		// Reading the Request
 		BufferedReader reader = new BufferedReader(new FileReader("request.txt"));
 		
 		String GETline  = reader.readLine();
 		
+		// Get the file specified in address bar
 		int indexOfSlash = GETline.indexOf("/");
 		GETline = GETline.substring(indexOfSlash);
 		
@@ -142,10 +144,12 @@ public class WebWorker implements Runnable
 		DateFormat df = DateFormat.getDateTimeInstance();
 		df.setTimeZone(TimeZone.getTimeZone("GMT"));
 		
+		// If files exist, 200 is returned
 		if (GETline.equals("") || requestedFile.exists()) {
 			os.write("HTTP/1.1 200 OK\n".getBytes());
 			isProblem = false;
 		}
+		// If file doesn't exist, 404 is returned
 		else {
 			os.write("HTTP/1.1 404 NOT FOUND\n".getBytes());
 			isProblem = true;
@@ -155,17 +159,18 @@ public class WebWorker implements Runnable
 		os.write("Date: ".getBytes());
 		os.write((df.format(d)).getBytes());
 		os.write("\n".getBytes());
-		os.write("Server: Jon's very own server\n".getBytes());
+		os.write("Server: Jacob's own server\n".getBytes());
 		
 		os.write("Connection: close\n".getBytes());
 		os.write("Content-Type: ".getBytes());
 		os.write(contentType.getBytes());
 		os.write("\n\n".getBytes()); // HTTP header ends with 2 newlines
 		
-		
+		// Return "ERROR" if the file doesn't exists
 		if (isProblem) {
 			return "ERROR";
 		}
+		// Return the filename if the files exists
 		else {
 			return GETline;
 		}
@@ -184,11 +189,13 @@ public class WebWorker implements Runnable
 		LocalDate date = LocalDate.now();
 		int dayOfMonth = date.getDayOfMonth();
 		
+		// 404 NOT FOUND Page output
 		if (file.equals("ERROR")) {
 			os.write("<html><head></head><body>\n".getBytes());
 			os.write("<center><h1>404 Not Found</h1></center>\n".getBytes());
 			os.write("</body></html>\n".getBytes());
 		}
+		// Default page
 		else if (file.equals("")) {
 			os.write("<html><head></head><body>\n".getBytes());
 			os.write("<h3>My web server works!</h3>\n".getBytes());
@@ -199,19 +206,22 @@ public class WebWorker implements Runnable
 			String line, lineReplace;
 			int index, index2;
 		
+			// replace the tags specified in assignment
 			while ((line = reader.readLine()) != null) {
 				index = line.indexOf("<cs371date>");
 				index2 = line.indexOf("<cs371server>");
 				if (index != -1) {
+					// Look for tag (date)
 					line = line.replaceAll("<cs371date>", LocalDate.now().toString());
 					System.out.println(line);
 				}
 				
+				// Look for tag (server)
 				if (index2 != -1) {
 					line = line.replaceAll("<cs371server>", "Jacob Rydecki's Server.");
 				}
 				
-				
+				// Write out the html line by line
 				os.write(line.getBytes());
 			}
 		
