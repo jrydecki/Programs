@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -180,6 +181,9 @@ public class WebWorker implements Runnable
 	private void writeContent(OutputStream os, String file) throws Exception
 	{
 		
+		LocalDate date = LocalDate.now();
+		int dayOfMonth = date.getDayOfMonth();
+		
 		if (file.equals("ERROR")) {
 			os.write("<html><head></head><body>\n".getBytes());
 			os.write("<center><h1>404 Not Found</h1></center>\n".getBytes());
@@ -192,9 +196,22 @@ public class WebWorker implements Runnable
 		}
 		else {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			String line;
+			String line, lineReplace;
+			int index, index2;
 		
 			while ((line = reader.readLine()) != null) {
+				index = line.indexOf("<cs371date>");
+				index2 = line.indexOf("<cs371server>");
+				if (index != -1) {
+					line = line.replaceAll("<cs371date>", LocalDate.now().toString());
+					System.out.println(line);
+				}
+				
+				if (index2 != -1) {
+					line = line.replaceAll("<cs371server>", "Jacob Rydecki's Server.");
+				}
+				
+				
 				os.write(line.getBytes());
 			}
 		
