@@ -5,3 +5,5 @@ Thought/Desgin: 0.5 Hours
 Programming: 2 Hours
 Debugging: 0.5 Hours
 TOTAL: 3 Hours
+
+3.) 66% Correct
