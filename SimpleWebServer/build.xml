@@ -20,6 +20,6 @@
 	
 		
 	<target name="run" depends="build">
-		<java classname="edu.nmsu.cs.webserver.WebServer" classpath="${build}"/>
+		<java classname="edu.nmsu.cs.webserver.WebServer" classpath="${build}" fork="true" dir="./www/"/>
 	</target>
 </project>
