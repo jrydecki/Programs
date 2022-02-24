@@ -1,4 +1,4 @@
-<project name="SimpleWebServer" basedir=".">
+<project name="SimpleWebServer" basedir="." default="run">
   	<description>
 		Simple Web Server
  	 </description>
@@ -16,7 +16,6 @@
 	
 	<target name="compile" description = "Compile the Program">
 		<javac srcdir="${src}" destdir="${build}"/>
-		<antcall target="run" />
 	</target>
 	
 		
