@@ -213,9 +213,14 @@ public class WebWorker implements Runnable
 			isProblem = false;
 		}
 		// If file doesn't exist, 404 is returned
+		else if (GETline.equals("favicon.ico")) {
+			os.write("HTTP/1.1 200 OK\n".getBytes());
+			isProblem = false;
+		}
 		else {
 			os.write("HTTP/1.1 404 NOT FOUND\n".getBytes());
 			isProblem = true;
+			contentType = "text/html";
 		}
 		
 		
@@ -248,10 +253,13 @@ public class WebWorker implements Runnable
 	 **/
 	private void writeContent(OutputStream os, String file, String contentType) throws Exception
 	{
-		System.out.println(file);
-		System.out.println(file);
-		System.out.println(file);
-		System.out.println(file);
+		
+		File check = new File(file);
+		
+		System.out.println("File name: "+ file);
+		System.out.println("Content type: " + contentType);
+		System.out.println("Does file exist?: " + check.exists());
+		
 		
 		LocalDate date = LocalDate.now();
 		int dayOfMonth = date.getDayOfMonth();
@@ -261,6 +269,7 @@ public class WebWorker implements Runnable
 			os.write("<html><head></head><body>\n".getBytes());
 			os.write("<center><h1>404 Not Found</h1></center>\n".getBytes());
 			os.write("</body></html>\n".getBytes());
+			
 		}
 		// Default page
 		else if (file.equals("")) {
@@ -269,23 +278,25 @@ public class WebWorker implements Runnable
 			os.write("</body></html>\n".getBytes());
 		}
 		
-		else if (contentType.equals("text/gif")) {
+		else if (contentType.equals("image/gif")) {
+			//System.out.println("contentType");
 			File img = new File(file);
 			byte[] imgData = Files.readAllBytes(img.toPath());
-			System.out.println("gif");
-			//os.write(imgData);
+			os.write(imgData);
+			
+			
 		}
-		else if (contentType.equals("text/jpeg")) {
+		else if (contentType.equals("image/jpeg")) {
 			File img = new File(file);
 			byte[] imgData = Files.readAllBytes(img.toPath());
-			System.out.println("jpeg");
-			//os.write(imgData);
+			os.write(imgData);
+			
 		}
-		else if (contentType.equals("text/png")) {
+		else if (contentType.equals("image/png")) {
 			File img = new File(file);
 			byte[] imgData = Files.readAllBytes(img.toPath());
-			System.out.println("png");
-			//os.write(imgData);
+			os.write(imgData);
+			
 		}
 		else {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
