@@ -122,6 +122,7 @@ public class WebWorker implements Runnable
 	}
 	
 	
+	// Helper Function in order to get the filename in the html request, returns the file name
 	private String getFileName() throws Exception{
 		BufferedReader reader = new BufferedReader(new FileReader("request.txt"));
 		
@@ -139,7 +140,7 @@ public class WebWorker implements Runnable
 	} // end getFileName
 	
 	
-	
+	// Helper Function that takes in a filename and gets the ending of the file (the file type)
 	private String getFileType(String filename) {
 		if (!filename.equals("")) {
 			String type = filename.substring(filename.indexOf("."));
@@ -149,6 +150,7 @@ public class WebWorker implements Runnable
 			return "";
 	} // end getFileType
 	
+	// Helper Function that takes a file ending and returns the proper/corresponding html content type header
 	private String getContentType(String type) {
 		
 		if (type.equals(".gif")) {
@@ -199,7 +201,6 @@ public class WebWorker implements Runnable
 		GETline = GETline.substring(1, indexOfNextSpace);
 		
 		
-		
 		File requestedFile = new File(GETline);
 		
 		
@@ -212,11 +213,12 @@ public class WebWorker implements Runnable
 			os.write("HTTP/1.1 200 OK\n".getBytes());
 			isProblem = false;
 		}
-		// If file doesn't exist, 404 is returned
+		// Stipulation for favicon.ico
 		else if (GETline.equals("favicon.ico")) {
 			os.write("HTTP/1.1 200 OK\n".getBytes());
 			isProblem = false;
 		}
+		// If file doesn't exist, 404 is returned
 		else {
 			os.write("HTTP/1.1 404 NOT FOUND\n".getBytes());
 			isProblem = true;
@@ -254,13 +256,6 @@ public class WebWorker implements Runnable
 	private void writeContent(OutputStream os, String file, String contentType) throws Exception
 	{
 		
-		File check = new File(file);
-		
-		System.out.println("File name: "+ file);
-		System.out.println("Content type: " + contentType);
-		System.out.println("Does file exist?: " + check.exists());
-		
-		
 		LocalDate date = LocalDate.now();
 		int dayOfMonth = date.getDayOfMonth();
 		
@@ -277,27 +272,26 @@ public class WebWorker implements Runnable
 			os.write("<h3>My web server works!</h3>\n".getBytes());
 			os.write("</body></html>\n".getBytes());
 		}
-		
+		// If a .gif is passed
 		else if (contentType.equals("image/gif")) {
 			//System.out.println("contentType");
 			File img = new File(file);
 			byte[] imgData = Files.readAllBytes(img.toPath());
 			os.write(imgData);
-			
-			
 		}
+		// If a .jpeg is passed
 		else if (contentType.equals("image/jpeg")) {
 			File img = new File(file);
 			byte[] imgData = Files.readAllBytes(img.toPath());
 			os.write(imgData);
-			
 		}
+		// If a .png is passed
 		else if (contentType.equals("image/png")) {
 			File img = new File(file);
 			byte[] imgData = Files.readAllBytes(img.toPath());
 			os.write(imgData);
-			
 		}
+		// If no error, and not an image, write html lines
 		else {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line, lineReplace;
