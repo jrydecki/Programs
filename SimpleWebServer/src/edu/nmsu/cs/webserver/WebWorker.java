@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -61,8 +62,11 @@ public class WebWorker implements Runnable
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
 			readHTTPRequest(is);     
-		    String file = writeHTTPHeader(os, "text/html"); 
-			writeContent(os, file);  					 
+			
+			String contentType = getContentType(getFileType(getFileName()));
+			
+		    String file = writeHTTPHeader(os, contentType); 
+			writeContent(os, file, contentType);  					 
 			os.flush();
 			socket.close();
 		}
@@ -109,9 +113,66 @@ public class WebWorker implements Runnable
 			}
 		}
 		buffer.close();
+		
+		BufferedReader reader = new BufferedReader(new FileReader("request.txt"));
+		String firstLine = reader.readLine();
+		
+		
 		return;
 	}
-
+	
+	
+	private String getFileName() throws Exception{
+		BufferedReader reader = new BufferedReader(new FileReader("request.txt"));
+		
+		String GETline  = reader.readLine();
+		
+		// Get the file specified in address bar
+		int indexOfSlash = GETline.indexOf("/");
+		GETline = GETline.substring(indexOfSlash);
+		
+		int indexOfNextSpace = GETline.indexOf(" ");
+		GETline = GETline.substring(1, indexOfNextSpace);
+		
+		
+		return GETline;
+	} // end getFileName
+	
+	
+	
+	private String getFileType(String filename) {
+		if (!filename.equals("")) {
+			String type = filename.substring(filename.indexOf("."));
+			return type;
+		}
+		else
+			return "";
+	} // end getFileType
+	
+	private String getContentType(String type) {
+		
+		if (type.equals(".gif")) {
+			return "image/gif";
+		}
+		
+		else if (type.equals(".jpeg")) {
+			return "image/jpeg";
+		}
+		
+		else if (type.equals(".png")) {
+			return "image/png";
+		}
+		
+		else {
+			return "text/html";
+		}
+		
+	} // end getContentType
+	
+	
+	
+	
+	
 	/**
 	 * Write the HTTP header lines to the client network connection.
 	 * 
@@ -136,6 +197,8 @@ public class WebWorker implements Runnable
 		
 		int indexOfNextSpace = GETline.indexOf(" ");
 		GETline = GETline.substring(1, indexOfNextSpace);
+		
+		
 		
 		File requestedFile = new File(GETline);
 		
@@ -183,8 +246,12 @@ public class WebWorker implements Runnable
 	 * @param os
 	 *          is the OutputStream object to write to
 	 **/
-	private void writeContent(OutputStream os, String file) throws Exception
+	private void writeContent(OutputStream os, String file, String contentType) throws Exception
 	{
+		System.out.println(file);
+		System.out.println(file);
+		System.out.println(file);
+		System.out.println(file);
 		
 		LocalDate date = LocalDate.now();
 		int dayOfMonth = date.getDayOfMonth();
@@ -201,6 +268,25 @@ public class WebWorker implements Runnable
 			os.write("<h3>My web server works!</h3>\n".getBytes());
 			os.write("</body></html>\n".getBytes());
 		}
+		
+		else if (contentType.equals("text/gif")) {
+			File img = new File(file);
+			byte[] imgData = Files.readAllBytes(img.toPath());
+			System.out.println("gif");
+			//os.write(imgData);
+		}
+		else if (contentType.equals("text/jpeg")) {
+			File img = new File(file);
+			byte[] imgData = Files.readAllBytes(img.toPath());
+			System.out.println("jpeg");
+			//os.write(imgData);
+		}
+		else if (contentType.equals("text/png")) {
+			File img = new File(file);
+			byte[] imgData = Files.readAllBytes(img.toPath());
+			System.out.println("png");
+			//os.write(imgData);
+		}
 		else {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			String line, lineReplace;
@@ -213,7 +299,6 @@ public class WebWorker implements Runnable
 				if (index != -1) {
 					// Look for tag (date)
 					line = line.replaceAll("<cs371date>", LocalDate.now().toString());
-					System.out.println(line);
 				}
 				
 				// Look for tag (server)

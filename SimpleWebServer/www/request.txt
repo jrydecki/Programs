@@ -1,4 +1,4 @@
-GET /test2.html HTTP/1.1
+GET /bianrygif.gif HTTP/1.1
 Host: localhost:8080
 Connection: keep-alive
 sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"
