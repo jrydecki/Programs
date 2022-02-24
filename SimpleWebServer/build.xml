@@ -14,9 +14,7 @@
 	</target>
 		
 	
-	<target name="compile" description = "Compile the Program">
-		<javac srcdir="${src}" destdir="${build}"/>
-	</target>
+
 	
 		
 	<target name="run" depends="build">
