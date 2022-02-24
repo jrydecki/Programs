@@ -11,13 +11,11 @@
 		<tstamp/>
 		<mkdir dir="${build}"/>
 		<javac srcdir="${src}" destdir = "${build}"/>
+		<antcall target="run"/>
 	</target>
 		
-	
-
-	
 		
-	<target name="run" depends="build">
+	<target name="run">
 		<java classname="edu.nmsu.cs.webserver.WebServer" classpath="${build}" fork="true" dir="./www/"/>
 		<delete dir="${build}"/>
 	</target>
