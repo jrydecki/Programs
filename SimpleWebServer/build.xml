@@ -7,25 +7,23 @@
 	<property name="build" location="./bin/"/>
 
 	
-	<target name="build">
+	<target name="clean">
+		<delete dir="${build}"/>
+	</target>
+
+
+	<target name="build" depends="clean">
 		<tstamp/>
 		<mkdir dir="${build}"/>
 		<javac srcdir="${src}" destdir = "${build}"/>
 	</target>
 		
-	
-	<target name="compile" description = "Compile the Program">
-		<javac srcdir="${src}" destdir="${build}"/>
-	</target>
-	
 		
 	<target name="run" depends="build">
 		<java classname="edu.nmsu.cs.webserver.WebServer" classpath="${build}" fork="true" dir="./www/"/>
 		<delete dir="${build}"/>
 	</target>
 	
-	<target name="clean">
-		<delete dir="${build}"/>
-	</target>
+
 	
 </project>
