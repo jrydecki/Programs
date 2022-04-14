@@ -1,4 +1,8 @@
 1.) 3 Hours
-2)
 
-3)
+2) Thought/Design: 0.5 h
+   Programming: 2.0 h
+   Debugging: 2.0 h
+   TOTAL: 4.5 h
+
+3) 66.6%
