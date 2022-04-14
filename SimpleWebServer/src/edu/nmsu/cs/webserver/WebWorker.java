@@ -255,7 +255,7 @@ public class WebWorker implements Runnable
 	 **/
 	private void writeContent(OutputStream os, String file, String contentType) throws Exception
 	{
-		
+		System.out.println(contentType);
 		LocalDate date = LocalDate.now();
 		int dayOfMonth = date.getDayOfMonth();
 		
