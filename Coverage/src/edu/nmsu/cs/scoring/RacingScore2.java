@@ -45,18 +45,34 @@ public class RacingScore2
 		else if (score2 < score1 && score2 < score3)
 		{
 			s1 = score1;
-			s2 = score2;
+			s2 = score3;
+			// s2 = score2;
 		}
+		
+		
+		/*
+		 * else if (score3 < score1 && score3 < score2)
+		 * I changed the if statement above to the if statement below in order
+		 * to allow 100% branch completion. 
+		 */
 		else if (score3 < score1)
-		// else if (score3 < score1 && score3 < score2)
+		
+		 
 		{
 			s1 = score1;
 			s2 = score2;
 		}
 		else
 		{
-			s1 = 99;
-			s2 = 99;
+			/*
+			 * s1 = 99;
+			 * s2 = 99;
+			 * I changed the code above to the code below, because if all the scores were equal (the same number)
+			 * the score would be set to 99 + 99, which is wrong.
+			 */
+			s1 = score1;
+			s2 = score2;
+			
 		}
 		s = s1 + s2;
 		return s;
@@ -65,8 +81,14 @@ public class RacingScore2
 	public static void main(String args[])
 	{
 		int s1, s2, s3;
+		
+		/*
+		 * if (args == null || args.length != 3)
+		 * I changed the if statement above to the if statement below
+		 * This was done in order to achieve 100% branch completion.
+		 */
+		
 		if (args.length != 3)
-		//if (args == null || args.length != 3)
 		{
 			System.err.println("Error: must supply three arguments!");
 			return;

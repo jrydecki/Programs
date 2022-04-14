@@ -38,7 +38,14 @@ public class RacingScore1
 	public int overallScore()
 	{
 		int s;
-		if (score1 < score2)
+		
+		/*
+		 * if (score1 < score2)
+		 * I switched the less than sign above to the greater than sign below,
+		 * because the less than sign was yielding wrong results
+		 */
+		
+		if (score1 > score2)
 			s = score2;
 		else
 			s = score1;
