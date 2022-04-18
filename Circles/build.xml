@@ -1,0 +1,32 @@
+<project name="Circles" basedir="." default="run">
+	
+	<property name="src" location="./src/"/>
+	<property name="build" location="./bin/"/>
+	<property name="junit.dir" location="./lib/"/>
+	
+	
+	
+	<target name="clean">
+		<delete dir="${build}"/>
+	</target>
+	
+	
+	
+	<target name="compile" depends="clean">
+		
+		<mkdir dir="${build}"/>
+		
+		<javac srcdir="${src}" destdir="${build}"/>
+		
+	</target>
+		
+	<target name="run" depends="compile">
+		
+		<java classname="edu.nmsu.cs.circles.Circle" classpath="${build}"/> 
+		
+	</target>
+	
+	
+	
+</project>
+
