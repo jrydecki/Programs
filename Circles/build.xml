@@ -1,8 +1,9 @@
-<project name="Circles" basedir="." default="run">
+<project name="Circles" basedir="." default="compile">
 	
 	<property name="src" location="./src/"/>
 	<property name="build" location="./bin/"/>
-	<property name="junit.dir" location="./lib/"/>
+	<property name="junit.jar" location="./lib/junit-4.13.2.jar"/>
+	
 	
 	
 	
@@ -12,19 +13,46 @@
 	
 	
 	
-	<target name="compile" depends="clean">
-		
+	<target name="compile">
 		<mkdir dir="${build}"/>
-		
-		<javac srcdir="${src}" destdir="${build}"/>
-		
+		<javac srcdir="${src}" destdir="${build}" classpath="${junit.jar}" includeantruntime="false"/>
 	</target>
-		
+	
+	
 	<target name="run" depends="compile">
-		
-		<java classname="edu.nmsu.cs.circles.Circle" classpath="${build}"/> 
-		
+		<java classname="edu.nmsu.cs.circles.CircleRun" classpath="${build}" fork="true">
+			<arg value="1"/><arg value="2"/><arg value="4"/>
+			<arg value="4"/><arg value="5"/><arg value="4"/>
+		</java>	
 	</target>
+	
+	
+	
+	<target name="junit" depends="compile">
+	      <java jar="${junit.jar}" classpath="lib/junit-4.13.2.jar" fork="true">
+	      	<arg value="org.junit.runner.JUnitCore"/>
+	      	<arg value="Circle1Test"/>
+	      </java>
+	   </target>
+	
+	<target name="test" depends="compile">
+		<junit printsummary="yes" haltonfailure="no">
+			<classpath location="lib/"/>
+			
+			<classpath location="${build}"/>
+			
+			<test name="edu.nmsu.cs.circles.Circel1Test"
+				haltonfailure="no" todir=".">
+				<formatter type="plain"/>
+				<formatter type="xml"/>
+			</test>
+		</junit>
+	</target>
+			
+		
+		
+		
+	
 	
 	
 	
