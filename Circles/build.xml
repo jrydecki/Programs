@@ -47,7 +47,7 @@
 	</target>
 	
 	
-	<target name="testCircle3">
+	<target name="testCircle3" depends="compile">
 		<java classname="org.junit.runner.JUnitCore" fork="true" dir=".">
 			<classpath>
 				<fileset dir="lib/">
