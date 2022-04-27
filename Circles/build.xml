@@ -47,6 +47,21 @@
 	</target>
 	
 	
+	<target name="testCircle3">
+		<java classname="org.junit.runner.JUnitCore" fork="true" dir=".">
+			<classpath>
+				<fileset dir="lib/">
+					<include name="**/*.jar"/>
+				</fileset>
+				<pathelement path="${build}"/>
+			</classpath>
+			<arg value="edu.nmsu.cs.circles.Circle1Test"/>
+		</java>
+	</target>
+		
+	
+	
+	
 	<!-- test Target -->
 	<target name="test" depends="compile, testCircle1, testCircle2">
 
