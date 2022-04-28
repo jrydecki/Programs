@@ -59,6 +59,56 @@ public class Circle1Test
 		Assert.assertTrue(p.x == 0 && p.y == 1);
 	}
 
+	
+	/**
+	 * Tests case for when two circles are not touching.
+	 */
+	@Test
+	public void intersectNoIntersection() {
+		System.out.println("Running test: noIntersection");
+		
+		System.out.println("noIntersection -- next to each other");
+		Circle1 circleA = new Circle1(0,50,10); 
+		Circle1 circleB = new Circle1(0,0,5);
+		Assert.assertFalse(circleA.intersects(circleB));
+		Assert.assertFalse(circleB.intersects(circleA));
+		
+		
+		System.out.println("noIntersection -- extremely close to each other");
+		circleA = new Circle1(1,10,2.9); 
+		circleB = new Circle1(1,5,2);
+		Assert.assertFalse(circleA.intersects(circleB));
+		Assert.assertFalse(circleB.intersects(circleA));
+	}
+	
+	
+	/**
+	 * Tests case for perfect intersection
+	 */
+	@Test
+	public void completeOverlap() {
+		System.out.println("Running test: completeOverlap");
+		
+		System.out.println("completeOverlap -- on top of each other at origin");
+		Circle1 circleA = new Circle1(0,0,10); 
+		Circle1 circleB = new Circle1(0,0,10);
+		Assert.assertTrue(circleA.intersects(circleB));
+		Assert.assertTrue(circleB.intersects(circleA));
+	}
+	
+	@Test
+	public void onePointOverlap() {
+		System.out.println("Running test: onePointOverlap");
+		
+		System.out.println("onePointOverlap -- touch on x-axis");
+		Circle1 circleA = new Circle1(0,0,10); 
+		Circle1 circleB = new Circle1(20,0,10);
+		Assert.assertTrue(circleA.intersects(circleB));
+		Assert.assertTrue(circleB.intersects(circleA));
+	}
+	
+	
+	
 	/***
 	 * NOT USED public static void main(String args[]) { try { org.junit.runner.JUnitCore.runClasses(
 	 * java.lang.Class.forName("Circle1Test")); } catch (Exception e) { System.out.println("Exception:

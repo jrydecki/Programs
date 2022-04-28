@@ -17,7 +17,13 @@
 	<!-- compile Target -->
 	<target name="compile">
 		<mkdir dir="${build}"/>
-		<javac srcdir="${src}" destdir="${build}" classpath="${junit.jar}" includeantruntime="false"/>
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<classpath>
+				<fileset dir="lib/">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
 	</target>
 	
 	
@@ -47,7 +53,7 @@
 	</target>
 	
 	
-	<target name="testCircle3" depends="compile">
+	<target name="testCircle3" depends="clean,compile">
 		<java classname="org.junit.runner.JUnitCore" fork="true" dir=".">
 			<classpath>
 				<fileset dir="lib/">
