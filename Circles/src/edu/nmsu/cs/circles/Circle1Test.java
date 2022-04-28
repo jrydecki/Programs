@@ -64,7 +64,7 @@ public class Circle1Test
 	 * Tests case for when two circles are not touching.
 	 */
 	@Test
-	public void intersectNoIntersection() {
+	public void noIntersection() {
 		System.out.println("Running test: noIntersection");
 		
 		System.out.println("noIntersection -- next to each other");
@@ -96,6 +96,9 @@ public class Circle1Test
 		Assert.assertTrue(circleB.intersects(circleA));
 	}
 	
+	/**
+	 * Test for the case the the circles are touching at only one point
+	 */
 	@Test
 	public void onePointOverlap() {
 		System.out.println("Running test: onePointOverlap");
@@ -105,8 +108,48 @@ public class Circle1Test
 		Circle1 circleB = new Circle1(20,0,10);
 		Assert.assertTrue(circleA.intersects(circleB));
 		Assert.assertTrue(circleB.intersects(circleA));
+		
+		System.out.println("onePointOverlap -- touch on y-axis");
+		circleA = new Circle1(0,0,10); 
+		circleB = new Circle1(0,20,10);
+		Assert.assertTrue(circleA.intersects(circleB));
+		Assert.assertTrue(circleB.intersects(circleA));
 	}
 	
+	/**
+	 * Test case for when the two circles are touching and intersecting at more than one point
+	 */
+	@Test
+	public void multiplePointOverlap() {
+		System.out.println("Running test: multiplePointOverlap");
+		
+		System.out.println("multiplePointOverlap -- circle origins on x-axis");
+		Circle1 circleA = new Circle1(0,0,10); 
+		Circle1 circleB = new Circle1(10,0,10);
+		Assert.assertTrue(circleA.intersects(circleB));
+		Assert.assertTrue(circleB.intersects(circleA));
+		
+		System.out.println("multiplePointOverlap -- circle origins on y-axis");
+		circleA = new Circle1(0,0,10); 
+		circleB = new Circle1(0,10,10);
+		Assert.assertTrue(circleA.intersects(circleB));
+		Assert.assertTrue(circleB.intersects(circleA));
+	}
+	
+	/**
+	 * Test case for when the two circles where one is inside the other circle. 
+	 * So one of the circles has to be smaller than the other
+	 */
+	@Test
+	public void smallerCircleInside() {
+		System.out.println("Running test: smallerCircleInside()");
+		
+		System.out.println("smallerCircleInside() -- both circles at origin");
+		Circle1 circleA = new Circle1(0,0,10); 
+		Circle1 circleB = new Circle1(0,0,5);
+		Assert.assertTrue(circleA.intersects(circleB));
+		Assert.assertTrue(circleB.intersects(circleA));
+	}
 	
 	
 	/***

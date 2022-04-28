@@ -35,25 +35,9 @@
 		</java>	
 	</target>
 	
-	
-	
+
 	<!-- testCircle1 Target -->
-	<target name="testCircle1" depends="compile">
-		<java classname="org.junit.runner.JUnitCore" classpath="${junit.jar};${build}" fork="true">
-	    	<arg value="edu.nmsu.cs.circles.Circle1Test"/>
-	    </java>
-	</target>
-	
-	
-	<!-- testCircle2 Target -->
-	<target name="testCircle2" depends="compile">
-		<java classname="org.junit.runner.JUnitCore" classpath="${junit.jar};${build}" fork="true">
-		    <arg value="edu.nmsu.cs.circles.Circle2Test"/>
-		</java>
-	</target>
-	
-	
-	<target name="testCircle3" depends="clean,compile">
+	<target name="testCircle1" depends="clean,compile">
 		<java classname="org.junit.runner.JUnitCore" fork="true" dir=".">
 			<classpath>
 				<fileset dir="lib/">
@@ -64,6 +48,19 @@
 			<arg value="edu.nmsu.cs.circles.Circle1Test"/>
 		</java>
 	</target>
+	
+	<!-- testCircle2 Target -->
+	<target name="testCircle2" depends="clean,compile">
+			<java classname="org.junit.runner.JUnitCore" fork="true" dir=".">
+				<classpath>
+					<fileset dir="lib/">
+						<include name="**/*.jar"/>
+					</fileset>
+					<pathelement path="${build}"/>
+				</classpath>
+				<arg value="edu.nmsu.cs.circles.Circle2Test"/>
+			</java>
+		</target>
 		
 	
 	
