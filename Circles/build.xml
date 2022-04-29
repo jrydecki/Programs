@@ -15,7 +15,7 @@
 	
 	
 	<!-- compile Target -->
-	<target name="compile">
+	<target name="compile" depends="clean">
 		<mkdir dir="${build}"/>
 		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
 			<classpath>
